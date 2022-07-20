@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mac.ecomadminphp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EcomAdminPhp"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ClientArea.ManageOrders.CommonOrderViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ClientArea.ManageOrders.Manage_OrdersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserArea.Activities.ViewProduct.SeeMore_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".UserArea.Activities.Additional.Privacy_Policies_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".UserArea.Activities.Additional.Contact_us_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".UserArea.Activities.Additional.My_Account_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".UserArea.Activities.Additional.Notification_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".UserArea.Activities.Orders.My_Orders_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".UserArea.Search.Search_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".UserArea.Activities.Cart.OrderPlacedSuccessfully_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ClientArea.ProductAvailibility.Add_PinCode"
+            android:exported="false" />
+        <activity
+            android:name=".UserArea.Activities.Cart.Cart_Activity"
+            android:exported="false"
+            android:launchMode="singleInstancePerTask" />
+        <activity
+            android:name=".UserArea.Activities.ViewProduct.SeeProduct_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Authentication.ChangePassword_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Authentication.ForgotPassword_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ClientArea.EditProducts.UpdateProduct_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ClientArea.EditProducts.EditProducts_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ClientArea.AddProduct.AddProduct_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".Authentication.EmailVerification_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ClientArea.categories.Add_Categories_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ClientArea.ClientAreaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Authentication.Login_Activity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Authentication.SignUp_Activity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <receiver
+            android:name="com.razorpay.RzpTokenReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="rzp.device_token.share" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.razorpay.CheckoutActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/CheckoutTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <data
+                    android:host="rzp.io"
+                    android:scheme="io.rzp" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

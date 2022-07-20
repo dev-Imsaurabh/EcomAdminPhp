@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "65079050245",
+    "project_id": "phpecom-4c5b7",
+    "storage_bucket": "phpecom-4c5b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65079050245:android:3be48d445be91332511c6c",
+        "android_client_info": {
+          "package_name": "com.mac.ecomadminphp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65079050245-v1vvp6hvamco9sprnue21gfac8q5g0cl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3AyFBvSgUruDhcoZK6DHHdw_anzcyNwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65079050245-v1vvp6hvamco9sprnue21gfac8q5g0cl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

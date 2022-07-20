@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/ll1"
+        android:orientation="horizontal"
+        android:layout_margin="8dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/orderId"
+            android:textSize="12sp"
+            android:text="Order ID: ORD13473562782572">
+
+        </TextView>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_weight="1"
+            android:id="@+id/orderDate"
+            android:gravity="center"
+            android:text="Order date: 12 july 2020 ">
+
+        </TextView>
+
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/ll1"
+        android:background="#D8D7D7"/>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/ll2"
+        android:layout_below="@id/ll1"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="8dp"
+            android:id="@+id/orderImage"
+            android:src="@drawable/static_image"/>
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/ll3"
+        android:layout_below="@id/ll1"
+        android:padding="8dp"
+        android:layout_toEndOf="@id/ll2"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="One piece mango"
+            android:layout_marginStart="16dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:id="@+id/productName"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Address: Ro.no 91 , P and T Colony ,khajuri ,varanasi 221002"
+            android:padding="8dp"
+            android:layout_marginStart="16dp"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:id="@+id/producAddress"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Expected delivery date: 2 july 2022"
+            android:padding="8dp"
+            android:textColor="@color/green"
+            android:layout_marginStart="16dp"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:id="@+id/productDeliveryDate"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:padding="8dp"
+            android:textColor="@color/green"
+            android:layout_marginStart="16dp"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:id="@+id/productDescription"/>
+
+
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/trackLayout"
+        android:layout_width="400dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/ll3">
+
+
+        <ProgressBar
+            android:id="@+id/order_tracker"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginHorizontal="30dp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/trackDot1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignStart="@+id/order_tracker"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="-20dp"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/track_dots"
+            app:lottie_speed="1" />
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/trackDot3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignEnd="@+id/order_tracker"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="-20dp"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/track_dots"
+            app:lottie_speed="1" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/trackDot2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="200dp"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/track_dots"
+            app:lottie_speed="1" />
+
+
+        <TextView
+            android:id="@+id/showStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/order_tracker"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:text="Ordered"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/order_tracker"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:text="Shipped"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/order_tracker"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            android:text="Delivered"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancelBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/trackLayout"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/btn_border4"
+        android:text="Cancel"
+        android:textColor="@color/green">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_border4"
+        android:visibility="gone"
+        android:textColor="@color/green"
+        android:id="@+id/returnBtn"
+        android:layout_margin="8dp"
+        android:layout_toEndOf="@id/cancelBtn"
+        android:layout_below="@id/trackLayout"
+        android:text="Return">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/trackLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="8dp"
+        android:id="@+id/topay"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="₹10"
+        android:textColor="@color/green"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+
+
+
+</RelativeLayout>

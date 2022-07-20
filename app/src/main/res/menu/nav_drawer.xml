@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/g2">
+
+        <item
+            android:id="@+id/nav_profile"
+            android:title="My Account" />
+
+        <item
+            android:id="@+id/nav_order"
+            android:title="My Order" />
+
+        <item
+            android:id="@+id/nav_cart"
+            android:title="My Cart" />
+
+        <item
+            android:id="@+id/nav_noti"
+            android:title="My Notification" />
+
+    </group>
+
+    <group android:id="@+id/g3">
+
+        <item
+            android:id="@+id/nav_help"
+            android:title="Help Centre" />
+        <item
+            android:id="@+id/nav_pp"
+            android:title="Privacy Policy" />
+
+    </group>
+
+    <group
+        android:id="@+id/g4">
+
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Logout" />
+
+    </group>
+
+
+</menu>

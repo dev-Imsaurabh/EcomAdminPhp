@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ClientArea.ClientAreaActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="8dp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:orientation="vertical">
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:id="@+id/add_category"
+                android:background="@drawable/btn_border1"
+                android:textAllCaps="false"
+                android:text="Add category->"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:id="@+id/add_products"
+                android:background="@drawable/btn_border1"
+                android:textAllCaps="false"
+                android:text="Add products->"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:id="@+id/edit_products"
+                android:background="@drawable/btn_border1"
+                android:textAllCaps="false"
+                android:text="Edit Products->"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:id="@+id/add_popularProducts"
+                android:background="@drawable/btn_border1"
+                android:textAllCaps="false"
+                android:text="Add popular products->"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:id="@+id/manage_pin"
+                android:background="@drawable/btn_border1"
+                android:textAllCaps="false"
+                android:text="Manage Pin Code->"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:id="@+id/manage_order"
+                android:background="@drawable/btn_border1"
+                android:textAllCaps="false"
+                android:text="Manage orders->"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</LinearLayout>

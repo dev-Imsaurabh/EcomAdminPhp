@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:padding="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <Spinner
+                android:id="@+id/address_spinner"
+                android:elevation="4dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:spinnerMode="dropdown"
+                android:layout_margin="8dp"
+                android:background="@drawable/spinner_design"
+                android:layout_height="50dp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add new"
+                android:id="@+id/add_new_address_btn"
+                android:background="@drawable/btn_border4"
+                android:textColor="@color/green"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_address_layout"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:padding="8dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:maxLength="50"
+                android:inputType="text"
+                android:background="@drawable/et_border1"
+                android:hint="Enter your first and last name"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:id="@+id/et_firstname"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:maxLength="6"
+                android:layout_marginTop="8dp"
+                android:inputType="number"
+                android:background="@drawable/et_border1"
+                android:hint="Enter your flat number"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:id="@+id/et_flatnumber"/>
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:maxLength="300"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_border1"
+                android:hint="Enter your colony/flat name"
+                android:singleLine="true"
+                android:maxLines="5"
+                android:padding="8dp"
+                android:id="@+id/et_flatname"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:maxLength="50"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_border1"
+                android:hint="Enter your road/area name"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:id="@+id/et_road"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:maxLength="6"
+                android:layout_marginTop="8dp"
+                android:inputType="number"
+                android:background="@drawable/et_border1"
+                android:hint="Enter your pincode"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:id="@+id/et_picode"/>
+
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:maxLength="50"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_border1"
+                android:hint="Enter your city name"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:id="@+id/et_city"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:maxLength="50"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_border1"
+                android:hint="Enter your state name"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:id="@+id/et_state"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:maxLength="50"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_border1"
+                android:hint="Enter your phone number"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:id="@+id/et_phone"/>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:id="@+id/set_address_btn"
+                android:background="@drawable/btn_border1"
+                android:text="Add"/>
+
+        </LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_margin="8dp"
+            android:visibility="gone"
+            android:id="@+id/checkOutOption"
+            android:layout_height="280dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp">
+
+                <LinearLayout
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:text="Item total: "/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp"
+                        android:text="Tax and charges:  "/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp"
+                        android:text="Delivery charges:  "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textStyle="italic"
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp"
+                        android:text="Expected delivery date:  "/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:layout_marginTop="18dp"
+                        android:text="Total pay: "/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/txt_itemTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="₹0 "
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+
+                    <TextView
+                        android:id="@+id/txt_tax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="₹8"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/txt_deliveryCharges"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="₹0  "
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/txt_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text=""
+                        android:textStyle="italic"
+                        android:textColor="@color/green"
+                        android:textSize="18sp" />
+
+
+                    <TextView
+                        android:id="@+id/et_totalPay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:text="₹0 /-"
+                        android:textColor="@color/green"
+                        android:textSize="18sp" />
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/address"
+                    android:layout_above="@id/order_btn">
+
+                </TextView>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_border1"
+                    android:layout_margin="8dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="Confirm order"
+                    android:id="@+id/order_btn"
+                    android:textColor="@color/white"/>
+
+
+
+
+
+            </RelativeLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+
+    </LinearLayout>
+
+</ScrollView>

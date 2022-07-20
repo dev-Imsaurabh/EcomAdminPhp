@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ClientArea.ProductAvailibility.Add_PinCode">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="8dp"
+        android:id="@+id/cv"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:padding="16dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:maxLength="6"
+                android:inputType="number"
+                android:background="@drawable/et_border1"
+                android:hint="Enter Pin Code"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:id="@+id/et_pincode"/>
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_height="60dp"
+                android:inputType="number"
+                android:maxLength="2"
+                android:background="@drawable/et_border1"
+                android:hint="Enter delivery days"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:id="@+id/et_days"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_height="60dp"
+                android:inputType="number"
+                android:maxLength="3"
+                android:background="@drawable/et_border1"
+                android:hint="Enter delivery charge"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:id="@+id/et_deliveryCharge"/>
+
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_border1"
+                android:textColor="@color/white"
+                android:id="@+id/add_btn"
+                android:layout_marginTop="16dp"
+                android:text="Add">
+
+            </androidx.appcompat.widget.AppCompatButton>
+
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/ac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cv"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="All Pin Code (Long click to delete Pin Code)"
+        android:textColor="#4CAF50" />
+
+    <ListView
+        android:id="@+id/pinCode_listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ac">
+
+    </ListView>
+
+
+
+
+</RelativeLayout>

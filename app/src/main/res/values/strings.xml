@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Grocery App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cutPrice"><strike>₹12</strike> </string>
+    <string name="start">Start</string>
+    <string name="close">Close</string>
+
+</resources>

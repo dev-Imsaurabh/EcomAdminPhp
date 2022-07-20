@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="60dp">
+
+
+    <TextView
+        android:id="@+id/recentStext"
+        android:layout_width="310dp"
+        android:layout_height="match_parent"
+        android:drawableLeft="@drawable/ic_recent"
+        android:drawablePadding="16dp"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:padding="8dp"
+        android:text="Recent product name"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_go"
+        android:padding="8dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:layout_centerVertical="true"
+        android:rotation="45"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#ECEAEA"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

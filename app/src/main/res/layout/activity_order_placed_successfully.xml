@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserArea.Activities.Cart.OrderPlacedSuccessfully_Activity">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:lottie_rawRes="@raw/order_placed"
+        android:padding="8dp"
+        app:lottie_speed="2"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/info"
+        android:layout_below="@id/animationView"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:textSize="22sp"
+        android:textColor="@color/green"
+        android:textStyle="bold"
+        android:text="Order placed !\nThank you for shopping with us :)"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cbtn"
+        android:layout_below="@id/info"
+        android:background="@drawable/btn_border4"
+        android:layout_centerHorizontal="true"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Continue shopping"/>
+
+
+
+</RelativeLayout>
