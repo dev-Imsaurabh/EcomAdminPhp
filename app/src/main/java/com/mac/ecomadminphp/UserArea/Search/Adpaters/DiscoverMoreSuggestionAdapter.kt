@@ -54,6 +54,8 @@ class DiscoverMoreSuggestionAdapter(
                 mainBinding.rc.visibility = VISIBLE
 
 
+
+
                 try {
                     var recentList  = java.util.ArrayList<String>()
                     recentList.addAll(PrefConfig.readListFromPref(context))

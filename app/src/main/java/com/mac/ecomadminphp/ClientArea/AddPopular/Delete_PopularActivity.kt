@@ -1,49 +1,38 @@
-package com.mac.ecomadminphp.Fragments
+package com.mac.ecomadminphp.ClientArea.AddPopular
 
-import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.denzcoskun.imageslider.constants.ScaleTypes
-import com.denzcoskun.imageslider.interfaces.ItemClickListener
-import com.denzcoskun.imageslider.models.SlideModel
+import com.mac.ecomadminphp.Adapters.DeletePopularAdapter
 import com.mac.ecomadminphp.Adapters.PopularModel
 import com.mac.ecomadminphp.Adapters.PopularVerticalAdapter
-import com.mac.ecomadminphp.UserArea.Activities.ViewProduct.SeeMore_Activity
+import com.mac.ecomadminphp.R
 import com.mac.ecomadminphp.Utils.Constants
-import com.mac.ecomadminphp.databinding.FragmentPopularBinding
+import com.mac.ecomadminphp.databinding.ActivityDeletePopularBinding
 import org.json.JSONArray
 import org.json.JSONObject
 
-class PopularFragment : Fragment() {
-
-    private lateinit var _binding: FragmentPopularBinding
-    private val binding get() = _binding
+class Delete_PopularActivity : AppCompatActivity() {
+    private lateinit var binding:ActivityDeletePopularBinding
     private var popularList = mutableListOf<PopularModel>()
     private var verticalPopularList = mutableListOf<PopularModel>()
     private val getHorizontalPopularUrl = Constants.baseUrl + "/Popular/getHorizontalPopular.php";
     private val getVerticalPopularUrl = Constants.baseUrl + "/Popular/getVerticalPopular.php";
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentPopularBinding.inflate(layoutInflater)
-
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding= ActivityDeletePopularBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         GetHorizontalPoplularList()
-        GetVerticalPoplularList()
 
 
-        return binding.root
+
     }
 
     private fun GetHorizontalPoplularList() {
@@ -67,53 +56,27 @@ class PopularFragment : Fragment() {
                         popularList.add(popularModel)
 
                     }
+                    GetVerticalPoplularList()
 
-                    setImages()
 
 
                 } else {
 
-                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
 
                 }
 
             }, { error ->
 
-                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
 
             })
 
-        val queue: RequestQueue = Volley.newRequestQueue(context)
+        val queue: RequestQueue = Volley.newRequestQueue(this)
         queue.add(request)
 
 
     }
-
-    private fun setImages() {
-        val imageList = ArrayList<SlideModel>()
-        for (item in popularList) {
-            imageList.add(
-                SlideModel(
-                    Constants.baseUrl + "/Popular/PosterImage/" + item.image,
-                    ScaleTypes.FIT
-                )
-            )
-        }
-
-        val imageSlider = binding.imageSlider
-        imageSlider.setImageList(imageList)
-
-        imageSlider.setItemClickListener(object : ItemClickListener {
-            override fun onItemSelected(position: Int) {
-
-                val intent = Intent(context, SeeMore_Activity::class.java)
-                intent.putExtra("category", popularList.get(position).category)
-                startActivity(intent)
-
-            }
-        })
-    }
-
 
     private fun GetVerticalPoplularList() {
 
@@ -136,28 +99,31 @@ class PopularFragment : Fragment() {
 
                 }
 
-                binding.verticalRecycler.setHasFixedSize(true)
-                binding.verticalRecycler.layoutManager=GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false)
-                val adapter = context?.let { PopularVerticalAdapter(it,verticalPopularList) }
-                if (adapter != null) {
-                    adapter.notifyDataSetChanged()
-                }
-                binding.verticalRecycler.adapter=adapter
+                popularList.addAll(verticalPopularList)
+
+                binding.deletePopularRecycler.setHasFixedSize(true)
+                binding.deletePopularRecycler.layoutManager=LinearLayoutManager(this)
+                val adapter = DeletePopularAdapter(this,popularList,this)
+                adapter.notifyDataSetChanged()
+                binding.deletePopularRecycler.adapter=adapter
+
+
+
 
 
             } else {
 
-                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
 
             }
 
         }, { error ->
 
-            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
 
         })
 
-        val queue: RequestQueue = Volley.newRequestQueue(context)
+        val queue: RequestQueue = Volley.newRequestQueue(this)
         queue.add(request)
 
 

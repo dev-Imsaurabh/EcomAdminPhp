@@ -12,12 +12,20 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.AuthFailureError
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.mac.ecomadminphp.UserArea.Activities.Model.OrderModel
 import com.mac.ecomadminphp.Utils.Constants
 import com.mac.ecomadminphp.Utils.ProgressDialog
 import com.mac.ecomadminphp.databinding.CancelReasonLayoutBinding
 import com.mac.ecomadminphp.databinding.OrderItemLayoutBinding
 import com.squareup.picasso.Picasso
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -65,42 +73,66 @@ class OrderAdapter(val context:Context,val orderList:MutableList<OrderModel>): R
 
             if(orderListPos.productTrackingStatus.equals("ordered")){
                 binding.trackDot1.visibility=VISIBLE
+                binding.topay.visibility= VISIBLE
 
             }else if(orderListPos.productTrackingStatus.equals("assigned")){
                 binding.cancelBtn.visibility= GONE
                 binding.trackDot1.visibility= VISIBLE
+                binding.topay.visibility= VISIBLE
 
             }
             else if(orderListPos.productTrackingStatus.equals("shipped")){
                 binding.trackDot2.visibility=VISIBLE
                 binding.orderTracker.progress=50
                 binding.cancelBtn.visibility= GONE
+                binding.topay.visibility= VISIBLE
+
 
             }else if(orderListPos.productTrackingStatus.equals("delivered")){
                 binding.trackDot3.visibility=VISIBLE
                 binding.orderTracker.progress=100
                 binding.productDeliveryDate.visibility== GONE
                 binding.cancelBtn.visibility= GONE
+                binding.returnBtn.visibility= VISIBLE
             }else if(orderListPos.productTrackingStatus.equals("cancel")){
 
                 binding.cancelBtn.visibility= GONE
-
+                binding.showStatus.setText("Canceled")
+                binding.productDescription.setText(orderListPos.productDescription)
+                binding.productDescription.setTextColor(context.resources.getColor(R.color.holo_red_dark))
+                binding.productDeliveryDate.visibility= GONE
+                binding.showStatus.setTextColor(context.resources.getColor(R.color.holo_red_dark))
             }else if(orderListPos.productTrackingStatus.equals("return")){
-
+                binding.returnBtn.visibility = GONE
                 binding.cancelBtn.visibility= GONE
+                binding.productDeliveryDate.visibility= GONE
 
             }else if(orderListPos.productTrackingStatus.equals("refund")){
 
                 binding.cancelBtn.visibility= GONE
+                binding.showStatus.setText("Canceled")
+                binding.productDescription.setText(orderListPos.productDescription)
+                binding.productDescription.setTextColor(context.resources.getColor(R.color.holo_red_dark))
+                binding.productDeliveryDate.visibility= GONE
+                binding.showStatus.setTextColor(context.resources.getColor(R.color.holo_red_dark))
+
 
             }else if(orderListPos.productTrackingStatus.equals("refunded")){
-
+                binding.showStatus.setText("Refunded")
+                binding.productDescription.setText(orderListPos.productDescription)
+                binding.productDescription.setTextColor(context.resources.getColor(R.color.holo_red_dark))
+                binding.productDeliveryDate.visibility= GONE
+                binding.showStatus.setTextColor(context.resources.getColor(R.color.holo_red_dark))
                 binding.cancelBtn.visibility= GONE
 
             }else if(orderListPos.productTrackingStatus.equals("returned")){
 
+                binding.showStatus3.setText("Returned")
+                binding.productDescription.setText(orderListPos.productDescription)
+                binding.productDescription.setTextColor(context.resources.getColor(R.color.holo_green_dark))
+                binding.productDeliveryDate.visibility= GONE
+                binding.showStatus.setTextColor(context.resources.getColor(R.color.holo_red_dark))
                 binding.cancelBtn.visibility= GONE
-
             }
 
 
@@ -110,6 +142,8 @@ class OrderAdapter(val context:Context,val orderList:MutableList<OrderModel>): R
 
                 openCancelReasonDialog(binding,orderListPos)
             }
+
+         //retutn btn pe click listener lagana hai aur account add ka option bhi denahai
 
 
 
@@ -131,11 +165,16 @@ class OrderAdapter(val context:Context,val orderList:MutableList<OrderModel>): R
         dialogView.cancelRadioGroup.setOnCheckedChangeListener(
             RadioGroup.OnCheckedChangeListener { group, checkedId ->
                 val radio: RadioButton = dialog.findViewById(checkedId)
-                reason= radio.text.toString()
+                if(orderListPos.productPaymentMode.equals("cod")){
+                    reason= "Customer canceled the order on "+getOrderDate(System.currentTimeMillis().toString())+" due to "+radio.text.toString()
+                }else{
+                    reason= "Customer canceled the order on "+getOrderDate(System.currentTimeMillis().toString())+" due to "+radio.text.toString() +"\n issuing refund of ₹ "
+
+                }
             })
         dialogView.cancelNowbtn.setOnClickListener {
             if(!reason.equals("")){
-                startCancellation(binding,dialog,dialogView,orderListPos)
+                startCancellation(binding,dialog,dialogView,orderListPos,reason)
 
             }else{
                 Toast.makeText(context, "please select at least one reason", Toast.LENGTH_SHORT).show()
@@ -148,16 +187,13 @@ class OrderAdapter(val context:Context,val orderList:MutableList<OrderModel>): R
         binding: OrderItemLayoutBinding,
         dialog: Dialog,
         dialogView: CancelReasonLayoutBinding,
-        orderListPos: OrderModel
+        orderListPos: OrderModel,
+        reason: String
     ) {
         val pd = ProgressDialog.progressDialog(context,"Cancelling order...")
         pd.show()
-        if(orderListPos.productPaymentMode.equals("cod")){
-            
-
-        }else{
-
-        }
+        val status = "cancel"
+        GetUserOrder(status,binding,pd,dialog,dialogView,orderListPos,reason)
 
     }
 
@@ -177,4 +213,173 @@ class OrderAdapter(val context:Context,val orderList:MutableList<OrderModel>): R
         format = SimpleDateFormat("EEE, d MMM", Locale.getDefault())
         return format.format(netDate)
     }
+
+
+    private fun GetUserOrder(
+        status: String,
+        binding: OrderItemLayoutBinding,
+        pd: Dialog,
+        dialog: Dialog,
+        dialogView: CancelReasonLayoutBinding,
+        orderListPos: OrderModel,
+        reason: String
+    ) {
+        val distinctList = mutableListOf<OrderModel>()
+        var value = ""
+
+        val fetchUrl = Constants.baseUrl+ "/Orders/getOrdersForUser.php"
+        val request: StringRequest = object : StringRequest(
+            Method.POST, fetchUrl,
+            Response.Listener { response ->
+
+                try {
+
+                    val jsonObject = JSONObject(response)
+                    val success: String = jsonObject.getString("success")
+                    val jsonArray: JSONArray = jsonObject.getJSONArray("data")
+                    if (success.equals("1")) {
+                        dialog.dismiss()
+
+
+                        for (item in 0 until jsonArray.length()) {
+
+                            val jsonObject: JSONObject = jsonArray.getJSONObject(item)
+
+                            val id: String = jsonObject.getString("id")
+                            val orderId: String = jsonObject.getString("orderId")
+                            val productId: String = jsonObject.getString("productId")
+                            val productQuantity: String = jsonObject.getString("productQuantity")
+                            val productAddress: String = jsonObject.getString("productAddress")
+                            val productTotalPay: String = jsonObject.getString("productTotalPay")
+                            val productPaymentMode: String = jsonObject.getString("productPaymentMode")
+                            val productPaymentStatus: String = jsonObject.getString("productPaymentStatus")
+                            val productTrackingStatus: String = jsonObject.getString("productTrackingStatus")
+                            val productUid: String = jsonObject.getString("productUid")
+                            val productDeliveryDate: String = jsonObject.getString("productDeliveryDate")
+                            val productName: String = jsonObject.getString("productName")
+                            val productImage: String = jsonObject.getString("productImage")
+                            val productOrderDate: String = jsonObject.getString("productOrderDate")
+                            val productDescription: String = jsonObject.getString("productDescription")
+                            val productRefundStatus: String = jsonObject.getString("productRefundStatus")
+
+
+                            val orderModel = OrderModel(id,orderId,productId,productQuantity,productAddress,productTotalPay,productPaymentMode,productPaymentStatus,productTrackingStatus,productUid,productDeliveryDate,productName,productImage,productOrderDate,productDescription,productRefundStatus)
+
+                            if(orderModel.orderId.equals(orderListPos.orderId)&&productTrackingStatus.equals("ordered")){
+                                distinctList.add(orderModel)
+                            }
+
+
+
+
+                        }
+
+                        if(distinctList.size>1){
+                            value="0";
+                        }else{
+                            value="1"
+                        }
+
+                        updateStatus(value,orderListPos,binding,dialog,dialogView,pd,status,reason)
+
+
+
+
+
+                    }else{
+                        dialog.dismiss()
+                    }
+
+                } catch (e: JSONException) {
+                    e.printStackTrace();
+                }
+
+
+            },
+            Response.ErrorListener { error ->
+                dialog.dismiss()
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+
+
+            }) {
+            override fun getParams(): Map<String, String> {
+                val params: MutableMap<String, String> = HashMap()
+                params["orderId"] = orderListPos.productUid
+                return params
+            }
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val params: MutableMap<String, String> = HashMap()
+                params["Content-Type"] = "application/x-www-form-urlencoded"
+                return params
+            }
+        }
+
+        val queue: RequestQueue = Volley.newRequestQueue(context)
+        queue.add(request)
+
+    }
+
+    private fun updateStatus(
+        value: String,
+        orderListPos: OrderModel,
+        binding: OrderItemLayoutBinding,
+        dialog: Dialog,
+        dialogView: CancelReasonLayoutBinding,
+        pd: Dialog,
+        status: String,
+        reason: String
+    ) {
+
+        val fetchUrl = Constants.baseUrl1+ "/updateStatus.php"
+        val request: StringRequest = object : StringRequest(
+            Method.POST, fetchUrl,
+            Response.Listener { response ->
+                if(response.equals("canceled")){
+                    pd.dismiss()
+                    binding.cancelBtn.visibility= GONE
+                    binding.showStatus.setText("Canceled")
+                    binding.productDescription.setText("Order canceled")
+                    binding.productDescription.setTextColor(context.resources.getColor(R.color.holo_red_dark))
+                    binding.productDeliveryDate.visibility= GONE
+                    binding.showStatus.setTextColor(context.resources.getColor(R.color.holo_red_dark))
+                    Toast.makeText(context,response, Toast.LENGTH_SHORT).show()
+                }
+
+
+
+            },
+            Response.ErrorListener { error ->
+                dialog.dismiss()
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+
+
+            }) {
+            override fun getParams(): Map<String, String> {
+                val params: MutableMap<String, String> = HashMap()
+                params["orderId"] = orderListPos.orderId
+                params["orderManagerId"] = orderListPos.productUid
+                params["value"] = value
+                params["topay"] = orderListPos.productToPay
+                params["status"] = status
+                params["productId"] = orderListPos.productId
+                params["paymentMode"] = orderListPos.productPaymentMode
+                params["reason"] = reason
+                return params
+            }
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val params: MutableMap<String, String> = HashMap()
+                params["Content-Type"] = "application/x-www-form-urlencoded"
+                return params
+            }
+        }
+
+        val queue: RequestQueue = Volley.newRequestQueue(context)
+        queue.add(request)
+
+    }
+
 }

@@ -3,6 +3,8 @@ package com.mac.ecomadminphp.ClientArea
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.mac.ecomadminphp.ClientArea.AddPopular.Add_PopularActivity
+import com.mac.ecomadminphp.ClientArea.AddPopular.Delete_PopularActivity
 import com.mac.ecomadminphp.ClientArea.AddProduct.AddProduct_Activity
 import com.mac.ecomadminphp.ClientArea.EditProducts.EditProducts_Activity
 import com.mac.ecomadminphp.ClientArea.ManageOrders.Manage_OrdersActivity
@@ -24,5 +26,7 @@ class ClientAreaActivity : AppCompatActivity() {
         binding.editProducts.setOnClickListener { startActivity(Intent(this,EditProducts_Activity::class.java)) }
         binding.managePin.setOnClickListener { startActivity(Intent(this,Add_PinCode::class.java)) }
         binding.manageOrder.setOnClickListener { startActivity(Intent(this,Manage_OrdersActivity::class.java)) }
+        binding.addPopularProducts.setOnClickListener { startActivity(Intent(this,Add_PopularActivity::class.java)) }
+        binding.deletePopularProducts.setOnClickListener { startActivity(Intent(this,Delete_PopularActivity::class.java)) }
     }
 }

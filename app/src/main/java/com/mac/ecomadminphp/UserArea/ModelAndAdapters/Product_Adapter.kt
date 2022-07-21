@@ -3,6 +3,7 @@ package com.mac.ecomadminphp.UserArea.ModelAndAdapters
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,7 +21,7 @@ import org.json.JSONObject
 import java.util.*
 import kotlin.collections.HashMap
 
-class Product_Adapter(val context:Context, val productList:List<Product_Model>) :RecyclerView.Adapter<Product_Adapter.myViewHolder>(){
+class Product_Adapter(val context:Context, val productList:List<String>) :RecyclerView.Adapter<Product_Adapter.myViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): myViewHolder {
@@ -43,12 +44,12 @@ class Product_Adapter(val context:Context, val productList:List<Product_Model>) 
 
 
     inner class myViewHolder(val binding: MainProductLayoutBinding) : RecyclerView.ViewHolder(binding.root){
-        fun setData(productList: Product_Model){
+        fun setData(productList: String){
 
-            binding.productCategoryTitle.text = productList.category
+            binding.productCategoryTitle.text = productList
             binding.seeMoreBtn.setOnClickListener {
                 val intent = Intent(context,SeeMore_Activity::class.java)
-                intent.putExtra("category",productList.category)
+                intent.putExtra("category",productList)
                 context.startActivity(intent)
             }
             setRecyclerView(productList,binding)
@@ -59,8 +60,8 @@ class Product_Adapter(val context:Context, val productList:List<Product_Model>) 
 
     }
 
-    private fun setRecyclerView(productList: Product_Model, binding: MainProductLayoutBinding) {
-        getProductData(productList.category,binding)
+    private fun setRecyclerView(productList: String, binding: MainProductLayoutBinding) {
+        getProductData(productList,binding)
 
     }
 
@@ -100,12 +101,15 @@ class Product_Adapter(val context:Context, val productList:List<Product_Model>) 
                 }
                 Collections.shuffle(productList)
 
+
+
                 binding.mainProductRecycler.setHasFixedSize(true)
                 binding.mainProductRecycler.layoutManager = GridLayoutManager(context,2,
                     GridLayoutManager.VERTICAL,false)
                 val adapter = ChildProductAdapter(context,productList)
                 adapter.notifyDataSetChanged()
                 binding.mainProductRecycler.adapter =adapter
+
 
 
 

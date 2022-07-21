@@ -7,6 +7,7 @@ public class Constants {
             val userPrefName = "userValue"
             val defaultPrefValue = "0"
             val baseUrl = "http://imsolodeveloper.online/Scripts"
+            val baseUrl1 = "http://imsolodeveloper.online/Scripts/dauth"
             val ownerEmail ="sau4478@gmail.com"
             const val razorPayBaseUrl="https://us-central1-ecommapp-af3a9.cloudfunctions.net/createOrder/"
         }

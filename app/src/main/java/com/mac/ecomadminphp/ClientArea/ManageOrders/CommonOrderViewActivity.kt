@@ -237,7 +237,11 @@ class CommonOrderViewActivity : AppCompatActivity() {
                             val emailv:String= jsonObject.getInt("emailv").toString()
                             val uid:String= jsonObject.getString("uid")
 
-                            deliverBoyList.add(name+","+uid)
+                            if(emailv.equals("1")){
+                                deliverBoyList.add(name+","+uid)
+
+                            }
+
 
                         }
                         GetUserOrder()

@@ -76,7 +76,12 @@ class Search_Activity : AppCompatActivity() {
 
     private fun SetDiscoverList() {
         if(!PrefConfig.readListFromPrefForDiscover(this).isEmpty()){
-            val discoverAdapter = DiscoverMoreSuggestionAdapter(this,PrefConfig.readListFromPrefForDiscover(this),binding)
+            var list =PrefConfig.readListFromPrefForDiscover(this)
+            var set: MutableSet<String> = LinkedHashSet()
+            set.addAll(list)
+            list.clear()
+            list.addAll(set)
+            val discoverAdapter = DiscoverMoreSuggestionAdapter(this,list,binding)
             binding.recyclerDiscoverMore.setHasFixedSize(true)
             binding.recyclerDiscoverMore.layoutManager=GridLayoutManager(this,3,GridLayoutManager.VERTICAL,false)
             discoverAdapter.notifyDataSetChanged()
@@ -139,7 +144,13 @@ class Search_Activity : AppCompatActivity() {
                         performSearch()
                         showDialog()
                         showInfo()
-                        PrefConfig.writeListInPrefForDiscover(this,discoverList)
+                        var set: MutableSet<String> = LinkedHashSet()
+                        set.addAll(discoverList)
+                        discoverList.clear()
+                        discoverList.addAll(set)
+                        if(!discoverList.isEmpty()){
+                            PrefConfig.writeListInPrefForDiscover(this,discoverList)
+                        }
 
                         try {
                             recentList.addAll(PrefConfig.readListFromPref(this))
@@ -188,6 +199,8 @@ class Search_Activity : AppCompatActivity() {
             }
 
 
+
+
             val search_Adapter = Search_Adapter(this,searchProductList,binding)
             binding.recyclerAllProducts.setAdapter(search_Adapter)
             search_Adapter.FilteredList(filterList)
@@ -203,6 +216,11 @@ class Search_Activity : AppCompatActivity() {
                 filterSearch.add(item2)
                 discoverList.add(item2)
             }
+
+            var set: MutableSet<String> = LinkedHashSet()
+            set.addAll(filterSearch)
+            filterSearch.clear()
+            filterSearch.addAll(set)
 
             val searchSuggestionAdapter = SearchSuggestion_Adapter(this,searchTagList,binding)
             binding.recyclerSearchSuggestion.setAdapter(searchSuggestionAdapter)

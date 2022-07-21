@@ -197,6 +197,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/showStatus3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/order_tracker"
@@ -240,13 +241,13 @@
     </androidx.appcompat.widget.AppCompatButton>
 
     <TextView
+        android:id="@+id/topay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/trackLayout"
         android:layout_alignParentEnd="true"
-        android:layout_margin="8dp"
-        android:id="@+id/topay"
         android:layout_marginStart="8dp"
+        android:visibility="gone"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"

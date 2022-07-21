@@ -18,6 +18,15 @@
         android:theme="@style/Theme.EcomAdminPhp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".UserArea.Activities.Buynow_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ClientArea.AddPopular.Delete_PopularActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ClientArea.AddPopular.Add_PopularActivity"
+            android:exported="false" />
+        <activity
             android:name=".ClientArea.ManageOrders.CommonOrderViewActivity"
             android:exported="false" />
         <activity

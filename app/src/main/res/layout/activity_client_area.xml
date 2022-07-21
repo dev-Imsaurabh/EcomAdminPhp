@@ -63,6 +63,15 @@
                 android:layout_height="60dp"
                 android:textColor="@color/white"
                 android:layout_margin="8dp"
+                android:id="@+id/delete_popularProducts"
+                android:background="@drawable/btn_border1"
+                android:textAllCaps="false"
+                android:text="Delete popular products->"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textColor="@color/white"
+                android:layout_margin="8dp"
                 android:id="@+id/manage_pin"
                 android:background="@drawable/btn_border1"
                 android:textAllCaps="false"

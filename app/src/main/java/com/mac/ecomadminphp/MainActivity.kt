@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     private  var finalList= mutableListOf<String>()
     private val getUrl = Constants.baseUrl+"/Categories/getCategory.php"
     private val fetchCart: String = Constants.baseUrl + "/Cart/fetchCart.php"
+    private val adminUrl: String = Constants.baseUrl +"/adminAccess.php"
     private var cartList = mutableListOf<String>()
     private lateinit var  uid:String
     private lateinit var toggle:ActionBarDrawerToggle
@@ -140,9 +141,31 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun ClientAreaConfig(email: String) {
-        if (email.equals(Constants.ownerEmail)) {
-            binding.btnClientArea.visibility = View.VISIBLE
-        }
+
+
+        val request: StringRequest =StringRequest(
+            Request.Method.POST, adminUrl,
+            { response ->
+
+                val getAdmins = response.split(",")
+                for(item in getAdmins){
+                    if (email.equals(item)) {
+                        binding.btnClientArea.visibility = View.VISIBLE
+                        break
+                    }
+
+                }
+            },
+            { error ->
+                Toast.makeText(this,"Something went wrong",Toast.LENGTH_SHORT).show()
+
+
+
+            })
+
+
+        val queue: RequestQueue = Volley.newRequestQueue(this)
+        queue.add(request)
 
     }
 

@@ -13,6 +13,7 @@ import com.mac.ecomadminphp.R
 import com.mac.ecomadminphp.UserArea.ModelAndAdapters.ChildProductAdapter
 import com.mac.ecomadminphp.UserArea.ModelAndAdapters.ChildeProductData
 import com.mac.ecomadminphp.UserArea.ModelAndAdapters.Product_Model
+import com.mac.ecomadminphp.UserArea.ModelAndAdapters.SeeMoreAdapter
 import com.mac.ecomadminphp.Utils.Constants
 import com.mac.ecomadminphp.databinding.ActivitySeeMoreBinding
 import com.mac.ecomadminphp.databinding.MainProductLayoutBinding
@@ -83,7 +84,7 @@ class SeeMore_Activity : AppCompatActivity() {
                     binding.seeMoreRecycler.setHasFixedSize(true)
                     binding.seeMoreRecycler.layoutManager = GridLayoutManager(this,2,
                         GridLayoutManager.VERTICAL,false)
-                    val adapter = ChildProductAdapter(this,productList)
+                    val adapter = SeeMoreAdapter(this,productList)
                     adapter.notifyDataSetChanged()
                     binding.seeMoreRecycler.adapter =adapter
 

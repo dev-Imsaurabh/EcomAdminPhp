@@ -13,7 +13,7 @@ import com.mac.ecomadminphp.Utils.Constants
 import com.mac.ecomadminphp.databinding.ProductCardLayoutBinding
 import com.squareup.picasso.Picasso
 
-class ChildProductAdapter(val context:Context, val productList:List<ChildeProductData>) :RecyclerView.Adapter<ChildProductAdapter.myViewHolder>(){
+class SeeMoreAdapter(val context:Context, val productList:List<ChildeProductData>) :RecyclerView.Adapter<SeeMoreAdapter.myViewHolder>(){
     override fun getItemViewType(position: Int): Int {
         return 1
     }
@@ -33,12 +33,8 @@ class ChildProductAdapter(val context:Context, val productList:List<ChildeProduc
 
     override fun getItemCount(): Int {
 
-        var size = 4;
-        if(productList.size<size){
-            size=productList.size
-        }
 
-        return size
+        return productList.size
     }
 
 

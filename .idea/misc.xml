@@ -21,12 +21,14 @@
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/drawable/spinner_design.xml" value="0.1935" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_add_categories.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_add_pin_code.xml" value="0.25" />
+        <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_add_popular.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_add_product.xml" value="0.264" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_cart.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_change_password.xml" value="0.2" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_client_area.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_common_order_view.xml" value="0.2" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_contact_us.xml" value="0.7535714285714286" />
+        <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_delete_popular.xml" value="0.2359375" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_edit_products.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_email_verification.xml" value="0.2" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/activity_forgot_password.xml" value="0.152" />
@@ -47,6 +49,7 @@
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/category_item_layout.xml" value="0.4" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/checkout_address_layout.xml" value="0.264" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/common_order_item_layout.xml" value="0.25" />
+        <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/delete_popular_item_layout.xml" value="0.264" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/discover_more_layout.xml" value="0.72" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/edit_product_item_layout.xml" value="0.4" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/fragment_active_fragments.xml" value="0.25" />
@@ -58,10 +61,12 @@
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/fragment_refund_fragments.xml" value="0.10989583333333333" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/fragment_return.xml" value="0.10989583333333333" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/header_layout_file.xml" value="0.25" />
+        <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/loading_layout.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/main_product_layout.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/manage_order_item_layout.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/online_cod_dialog.xml" value="0.4" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/order_item_layout.xml" value="0.264" />
+        <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/popular_vertical_laypout.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/product_card_layout.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/product_card_layout2.xml" value="0.25" />
         <entry key="..\:/Users/Random Saurabh/AndroidStudioProjects/EcomAdminPhp/app/src/main/res/layout/progress_dialog.xml" value="0.25" />
