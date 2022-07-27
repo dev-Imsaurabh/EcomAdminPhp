@@ -104,7 +104,7 @@ class My_Orders_Activity : AppCompatActivity() {
 
                          binding.orderRecycler.setHasFixedSize(true)
                         binding.orderRecycler.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
-                        val adapter = OrderAdapter(this,orderList)
+                        val adapter = OrderAdapter(this,orderList,this)
                         adapter.notifyDataSetChanged()
                         binding.orderRecycler.adapter=adapter
 

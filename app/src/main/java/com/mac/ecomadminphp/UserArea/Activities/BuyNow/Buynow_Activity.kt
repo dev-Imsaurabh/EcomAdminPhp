@@ -1,23 +1,19 @@
-package com.mac.ecomadminphp.UserArea.Activities.Cart
+package com.mac.ecomadminphp.UserArea.Activities.BuyNow
 
-import android.R
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -26,18 +22,15 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.GsonBuilder
 import com.mac.ecomadminphp.ClientArea.ProductAvailibility.Pincode_Model
-import com.mac.ecomadminphp.FCM.Model.Constant
+import com.mac.ecomadminphp.FCM.Model.Constant.TOPIC
 import com.mac.ecomadminphp.FCM.Model.NotificationData
 import com.mac.ecomadminphp.FCM.Model.PushNotification
 import com.mac.ecomadminphp.FCM.SendNotification
-import com.mac.ecomadminphp.UserArea.Activities.Adapters.Cart_Adapter
+import com.mac.ecomadminphp.UserArea.Activities.Cart.OrderPlacedSuccessfully_Activity
 import com.mac.ecomadminphp.UserArea.Activities.Model.AddressModel
-import com.mac.ecomadminphp.UserArea.Activities.Model.Cart_Model
-import com.mac.ecomadminphp.UserArea.Activities.Model.Cart_item_Model
 import com.mac.ecomadminphp.Utils.Constants
 import com.mac.ecomadminphp.Utils.ProgressDialog
-import com.mac.ecomadminphp.Utils.SharedPref
-import com.mac.ecomadminphp.databinding.ActivityCartBinding
+import com.mac.ecomadminphp.databinding.ActivityBuynowBinding
 import com.mac.ecomadminphp.databinding.CheckoutAddressLayoutBinding
 import com.mac.ecomadminphp.databinding.OnlineCodDialogBinding
 import com.mac.ecommerceuserapp.kotlin.Api.Order
@@ -45,8 +38,8 @@ import com.mac.ecommerceuserapp.kotlin.Api.RetrofitInterface
 import com.razorpay.Checkout
 import com.razorpay.PaymentData
 import com.razorpay.PaymentResultWithDataListener
+import com.squareup.picasso.Picasso
 import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -57,8 +50,8 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
-    private lateinit var binding: ActivityCartBinding
+class Buynow_Activity : AppCompatActivity() , PaymentResultWithDataListener {
+
     private val fetchCart: String = Constants.baseUrl + "/Cart/fetchCart.php"
     private val getCartItemsUrl: String = Constants.baseUrl + "/Cart/getCartItems.php"
     private val getQuanUrl: String = Constants.baseUrl + "/Cart/getQuantity.php"
@@ -68,47 +61,49 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
     private val placeOrderUrl = Constants.baseUrl + "/Orders/order.php"
     private val emptyCartUrl = Constants.baseUrl + "/Orders/dropCart.php"
     private val updateStockUrl = Constants.baseUrl + "/Orders/updateStock.php"
-    private var cartItemList = mutableListOf<Cart_item_Model>()
+    private lateinit var expectedDate:String
+    private lateinit var finaladdress: String
+
+
+    var pinCodeList = mutableListOf<Pincode_Model>()
     private var finalList = mutableListOf<String>()
-    private var wholeProductsName =""
+
 
     private lateinit var adapter: ArrayAdapter<String>
-
-    private var finalList1 = mutableListOf<String>()
-
-    private var cartList = mutableListOf<String>()
-    private lateinit var uid: String
-    private lateinit var expectedDate:String
-    private var totalCartAmount: Int = 0
-    private var toPay: Int = 0
-    private lateinit var finaladdress: String
-    private var done: Int = 0
-    private lateinit var paymentMode: String
     private var available = true
     private var available1 = true
+
     private lateinit var days: String
     private lateinit var deliveryCharges: String
     private lateinit var deliveryDate: String
-    val list = mutableListOf<Cart_Model>()
-    var pinCodeList = mutableListOf<Pincode_Model>()
-    var orderComplete: Int = 0
-    private  var  initvalue:Int =0
 
-    private var productName: String = ""
-    private var productImage: String = ""
-    private var productPrice: String = ""
-    private var productCategory: String = ""
-    private var productStock: String = ""
-    private val TAG = "RazorPayActivity"
+    private var finalList1 = mutableListOf<String>()
+
+
+
+    private lateinit var paymentMode: String
+
+
+    private lateinit var binding:ActivityBuynowBinding
+    private lateinit var pName: String
+    private lateinit var pCat: String
+    private lateinit var pStock: String
+    private lateinit var pPrice: String
+    private lateinit var pDisPrice: String
+    private lateinit var pDesc: String
+    private lateinit var pId: String
+    private lateinit var pImage: String
+    private lateinit var uid:String
+    private  var toPay:Int=0
+    private  var totalPay:Int=0
+    private var quantity = 1
+
     lateinit var retrofit: Retrofit
     lateinit var retroInterface: RetrofitInterface
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCartBinding.inflate(layoutInflater)
+        binding= ActivityBuynowBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        title = "Your Cart"
 
         //razorpay
         Checkout.preload(this)
@@ -120,344 +115,89 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
         retroInterface =retrofit.create(RetrofitInterface::class.java)
 
         //
-
         val intent = intent.getStringExtra("paymentMode");
 
-        GetUser()
-        CheckProductAlreadyInCart()
+
+        getIntents()
+        setProducts()
         GetPinCode()
+        ClickOnDecreaseBtn()
+        ClickOnIncreaseBtn()
         ClickOnCheckOutBtn()
 
+
+        binding.removeFromCartBtn.setOnClickListener {
+            finish()
+        }
 
         if (intent != null) {
             paymentMode = intent
             ShowAddressDialog(paymentMode)
         }
 
-    }
-
-    private fun GetAddress(
-        dialog: Dialog,
-        dialogView: CheckoutAddressLayoutBinding,
-        finalList1: MutableList<String>,
-        paymentMode: String
-    ) {
-        val request: StringRequest =
-            object : StringRequest(Request.Method.POST, getAddressUrl, { response ->
-
-
-                val addressList = mutableListOf<AddressModel>()
-                val jsonObject = JSONObject(response)
-                val success: String = jsonObject.getString("success")
-                val jsonArray: JSONArray = jsonObject.getJSONArray("data")
-                addressList.clear()
-                this.finalList1.clear()
-                if (success.equals("1")) {
-
-                    for (item in 0 until jsonArray.length()) {
-                        val jsonObject: JSONObject = jsonArray.getJSONObject(item)
-                        val id: String = jsonObject.getString("id")
-                        val address: String = jsonObject.getString("address")
-                        val addressModel = AddressModel(id, address)
-
-                        addressList.add(0, addressModel)
-
-                    }
-
-
-                    for (item in 0 until addressList.size) {
-
-                        this.finalList1.add(addressList.get(item).address)
-
-                    }
-
-                    val loadingDialog = ProgressDialog.progressDialog(this, "Loading...")
-                    loadingDialog.show()
-
-
-                    SetupSpinnerAdapter(dialog, dialogView, paymentMode, loadingDialog)
-
-
-                } else {
-
-                    Toast.makeText(this, response, Toast.LENGTH_SHORT).show()
-
-                }
-
-            }, { error ->
-
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
-
-            }) {
-
-                override fun getParams(): Map<String, String> {
-                    val params: MutableMap<String, String> = HashMap()
-                    params["addressId"] = "add" + uid
-                    return params
-                }
-
-                @Throws(AuthFailureError::class)
-                override fun getHeaders(): Map<String, String> {
-                    val params: MutableMap<String, String> = HashMap()
-                    params["Content-Type"] = "application/x-www-form-urlencoded"
-                    return params
-                }
-
-            }
-
-        val queue: RequestQueue = Volley.newRequestQueue(this)
-        queue.add(request)
-
 
     }
 
-    private fun GetUser() {
-        val checkUser =
-            SharedPref.readFromSharedPref(this, Constants.userPrefName, Constants.defaultPrefValue);
-        if (!checkUser.equals("0")) {
-            val splitDetails = checkUser?.split(",")
-            uid = splitDetails?.get(3) ?: "uid"
 
+
+    private fun setProducts() {
+        try {
+            binding.proName.setText(pName)
+            binding.proPrice.setText("₹"+pDisPrice)
+            Picasso.get().load(Constants.baseUrl+"/Products/ProductImages/"+pImage).into(binding.proImage)
+            binding.quantity.setText(quantity.toString())
+            totalPay=pDisPrice.toInt()*quantity
+            binding.totalCartValue.setText("Total :₹"+totalPay.toString()+" /-")
+        } catch (e: Exception) {
         }
     }
 
-    private fun CheckProductAlreadyInCart() {
-        cartItemList.clear()
-        val dialog = ProgressDialog.progressDialog(this, "Loading...")
-        dialog.show()
-        val request: StringRequest = object : StringRequest(
-            Method.POST, fetchCart,
-            Response.Listener { response ->
+    private fun getIntents() {
+        pId = intent.getStringExtra("pId").toString()
+        pName = intent.getStringExtra("pName").toString()
+        pCat = intent.getStringExtra("pCat").toString()
+        pStock = intent.getStringExtra("pStock").toString()
+        pPrice = intent.getStringExtra("pPrice").toString()
+        pDisPrice = intent.getStringExtra("pDisPrice").toString()
+        pDesc = intent.getStringExtra("pDesc").toString()
+        pImage = intent.getStringExtra("pImage").toString()
+        uid = intent.getStringExtra("uid").toString()
 
-                try {
-
-                    val jsonObject = JSONObject(response)
-                    val success: String = jsonObject.getString("success")
-                    val jsonArray: JSONArray = jsonObject.getJSONArray("data")
-                    if (success.equals("1")) {
+    }
 
 
-                        for (item in 0 until jsonArray.length()) {
+    private fun ClickOnDecreaseBtn() {
+        binding.decBtn.setOnClickListener {
+            binding.incBtn.isEnabled=true
 
-                            val jsonObject: JSONObject = jsonArray.getJSONObject(item)
+            if(quantity!=1){
+                quantity--
+                binding.quantity.setText(quantity.toString())
+                totalPay =quantity*pDisPrice.toInt()
+                binding.totalCartValue.setText("Total :₹"+totalPay.toString()+" /-")
+            }else{
+                binding.decBtn.isEnabled=false
 
-                            val id: String = jsonObject.getString("id")
-                            val pId: String = jsonObject.getString("pId")
-                            val quantity: String = jsonObject.getString("quantity")
-
-                            var cartItemModel = Cart_item_Model(id, pId, quantity)
-                            cartItemList.add(cartItemModel)
-                            cartList.add(pId)
-
-                        }
-
-                        if (cartList.isEmpty()) {
-                            binding.userInfo.visibility = VISIBLE
-                            dialog.dismiss()
-                        } else {
-                            binding.userInfo.visibility = GONE
-
-                        }
-
-                        GetCartItems(dialog)
-
-
-                    }
-
-                } catch (e: JSONException) {
-                    e.printStackTrace();
-                }
-
-
-            },
-            Response.ErrorListener { error ->
-                Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
-
-
-            }) {
-            override fun getParams(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                params["cartId"] = "cart" + uid
-                return params
-            }
-
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                params["Content-Type"] = "application/x-www-form-urlencoded"
-                return params
             }
         }
-
-        val queue: RequestQueue = Volley.newRequestQueue(this)
-        queue.add(request)
-
     }
 
 
-    private fun GetCartItems(dialog: Dialog) {
-        var i: Int = 0
-        while (i < cartList.size) {
-            getItems(cartList.get(i), dialog)
-            i++
-        }
+    private fun ClickOnIncreaseBtn() {
+        binding.incBtn.setOnClickListener {
+            binding.decBtn.isEnabled=true
+            if(quantity<pStock.toInt()){
+                quantity++
+                binding.quantity.setText(quantity.toString())
+                totalPay =quantity*pDisPrice.toInt()
+                binding.totalCartValue.setText("Total :₹"+totalPay.toString()+" /-")
+            }else{
+                binding.incBtn.isEnabled=false
 
-    }
 
-    private fun getItems(pId: String, dialog: Dialog) {
-        val request: StringRequest = object : StringRequest(
-            Method.POST, getCartItemsUrl,
-            Response.Listener { response ->
-
-                getquantity(response, pId, dialog)
-
-            },
-            Response.ErrorListener { error ->
-                Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
-
-            }) {
-            override fun getParams(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                params["pId"] = pId
-                return params
-            }
-
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                params["Content-Type"] = "application/x-www-form-urlencoded"
-                return params
             }
         }
-
-        val queue: RequestQueue = Volley.newRequestQueue(this)
-        queue.add(request)
-
     }
-
-    private fun getquantity(response1: String?, pId: String, dialog: Dialog) {
-
-        val request: StringRequest = object : StringRequest(
-            Method.POST, getQuanUrl,
-            Response.Listener { response ->
-
-
-                try {
-
-                    val jsonObject1 = JSONObject(response)
-                    val success1: String = jsonObject1.getString("success")
-                    val jsonArray1: JSONArray = jsonObject1.getJSONArray("data")
-
-                    if (success1.equals("1")) {
-
-
-                        val jsonObject1: JSONObject = jsonArray1.getJSONObject(0)
-
-                        val id: String = jsonObject1.getString("id")
-                        val pId: String = jsonObject1.getString("pId")
-                        val quantity: String = jsonObject1.getString("quantity")
-
-                        val jsonObject = JSONObject(response1)
-                        val success: String = jsonObject.getString("success")
-                        val jsonArray: JSONArray = jsonObject.getJSONArray("data")
-                        if (success.equals("1")) {
-
-
-                            val jsonObject: JSONObject = jsonArray.getJSONObject(0)
-
-                            val id: String = jsonObject.getString("id")
-                            val pName: String = jsonObject.getString("pName")
-                            val pCat: String = jsonObject.getString("pCat")
-                            val pStock: String = jsonObject.getString("pStock")
-                            val pPrice: String = jsonObject.getString("pPrice")
-                            val pDisPrice: String = jsonObject.getString("pDisPrice")
-                            val pRatings: String = jsonObject.getString("pRatings")
-                            val pDesc: String = jsonObject.getString("pDesc")
-                            val pImage: String = jsonObject.getString("pImage")
-                            val pTags: String = jsonObject.getString("pTags")
-                            val pDelivery: String = jsonObject.getString("pDelivery")
-
-
-                            totalCartAmount += quantity.toInt() * pDisPrice.toInt()
-                            binding.totalCartValue.setText("Total : ₹" + totalCartAmount.toString() + " /-")
-
-                            var cartModel = Cart_Model(
-                                id,
-                                pName,
-                                pCat,
-                                pStock,
-                                pPrice,
-                                pDisPrice,
-                                pRatings,
-                                pDesc,
-                                pImage,
-                                pTags,
-                                pDelivery,
-                                quantity,
-                                uid
-                            )
-                            list.add(0, cartModel)
-                            done++
-
-                            if (done == cartList.size) {
-                                dialog.dismiss()
-                                binding.checkoutBtn.visibility = VISIBLE
-                                binding.totalCartValue.visibility = VISIBLE
-                                SetCartRecycler(dialog)
-                                done = 0
-                            }
-
-                        }
-
-
-                    } else {
-                        Toast.makeText(this, response, Toast.LENGTH_SHORT).show()
-                    }
-
-
-                } catch (e: JSONException) {
-                    e.printStackTrace();
-                }
-
-
-            },
-            Response.ErrorListener { error ->
-                Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
-
-            }) {
-            override fun getParams(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                params["cartId"] = "cart" + uid
-                params["pId"] = pId
-                return params
-            }
-
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                params["Content-Type"] = "application/x-www-form-urlencoded"
-                return params
-            }
-        }
-
-        val queue: RequestQueue = Volley.newRequestQueue(this)
-        queue.add(request)
-
-
-    }
-
-    private fun SetCartRecycler(dialog: Dialog) {
-
-        binding.cartRecycler.setHasFixedSize(true);
-        binding.cartRecycler.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val adapter = Cart_Adapter(this, list, this)
-        adapter.notifyDataSetChanged()
-        binding.cartRecycler.adapter = adapter
-
-
-    }
-
 
     private fun GetPinCode() {
 
@@ -544,10 +284,9 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
 
     }
-
     private fun ShowAddressDialog(paymentMode: String) {
 
-        val dialog = Dialog(this, R.style.ThemeOverlay_Material_Light)
+        val dialog = Dialog(this, android.R.style.ThemeOverlay_Material_Light)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         val dialogView = CheckoutAddressLayoutBinding.inflate(layoutInflater)
         dialog.setContentView(dialogView.root)
@@ -574,7 +313,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
                 }
             } else {
-                val ad = AlertDialog.Builder(this@Cart_Activity)
+                val ad = AlertDialog.Builder(this)
                 ad.setTitle("Shipment not available")
                 ad.setMessage("Sorry , we do not ship there")
 
@@ -589,10 +328,10 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
 
         val addnewaddressBtn = dialogView.addNewAddressBtn.setOnClickListener {
-            dialogView.newAddressLayout.visibility = VISIBLE
+            dialogView.newAddressLayout.visibility = View.VISIBLE
         }
 
-        val itemTotal = dialogView.txtItemTotal.setText("₹" + totalCartAmount.toString())
+        val itemTotal = dialogView.txtItemTotal.setText("₹" + totalPay.toString())
 
         var et_pincode = dialogView.etPicode.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -701,6 +440,83 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
     }
 
 
+
+    private fun GetAddress(
+        dialog: Dialog,
+        dialogView: CheckoutAddressLayoutBinding,
+        finalList1: MutableList<String>,
+        paymentMode: String
+    ) {
+        val request: StringRequest =
+            object : StringRequest(Request.Method.POST, getAddressUrl, { response ->
+
+
+                val addressList = mutableListOf<AddressModel>()
+                val jsonObject = JSONObject(response)
+                val success: String = jsonObject.getString("success")
+                val jsonArray: JSONArray = jsonObject.getJSONArray("data")
+                addressList.clear()
+                this.finalList1.clear()
+                if (success.equals("1")) {
+
+                    for (item in 0 until jsonArray.length()) {
+                        val jsonObject: JSONObject = jsonArray.getJSONObject(item)
+                        val id: String = jsonObject.getString("id")
+                        val address: String = jsonObject.getString("address")
+                        val addressModel = AddressModel(id, address)
+
+                        addressList.add(0, addressModel)
+
+                    }
+
+
+                    for (item in 0 until addressList.size) {
+
+                        this.finalList1.add(addressList.get(item).address)
+
+                    }
+
+                    val loadingDialog = ProgressDialog.progressDialog(this, "Loading...")
+                    loadingDialog.show()
+
+
+                    SetupSpinnerAdapter(dialog, dialogView, paymentMode, loadingDialog)
+
+
+                } else {
+
+                    Toast.makeText(this, response, Toast.LENGTH_SHORT).show()
+
+                }
+
+            }, { error ->
+
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
+
+            }) {
+
+                override fun getParams(): Map<String, String> {
+                    val params: MutableMap<String, String> = HashMap()
+                    params["addressId"] = "add" + uid
+                    return params
+                }
+
+                @Throws(AuthFailureError::class)
+                override fun getHeaders(): Map<String, String> {
+                    val params: MutableMap<String, String> = HashMap()
+                    params["Content-Type"] = "application/x-www-form-urlencoded"
+                    return params
+                }
+
+            }
+
+        val queue: RequestQueue = Volley.newRequestQueue(this)
+        queue.add(request)
+
+
+    }
+
+
     private fun SetupSpinnerAdapter(
         dialog: Dialog,
         dialogView: CheckoutAddressLayoutBinding,
@@ -720,7 +536,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
         adapter = ArrayAdapter(
             this,
-            R.layout.simple_spinner_item, finalList1
+            android.R.layout.simple_spinner_item, finalList1
         )
 
 
@@ -740,7 +556,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
 
                 if (!finalList1[position].trim().equals("Select address")) {
-                    dialogView.checkOutOption.visibility = VISIBLE
+                    dialogView.checkOutOption.visibility = View.VISIBLE
                     val splitPincode = finalList1[position].split("~")
                     for (item in 0 until finalList.size) {
                         if (!splitPincode[6].trim().equals(finalList[item])) {
@@ -753,7 +569,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
                     }
 
                     if (!available1) {
-                        val ad = AlertDialog.Builder(this@Cart_Activity)
+                        val ad = AlertDialog.Builder(this@Buynow_Activity)
                         ad.setTitle("Shipment not available")
                         ad.setMessage("Sorry , we do not ship there")
 
@@ -767,7 +583,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
 
                 } else {
-                    dialogView.checkOutOption.visibility = GONE
+                    dialogView.checkOutOption.visibility = View.GONE
 
                 }
             }
@@ -776,6 +592,30 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
             }
 
         }
+
+    }
+
+
+
+    private fun generateOrderId(amount: String, paymentDialog: Dialog) {
+
+        var map = HashMap<String,String>()
+        map["amount"]=amount
+
+
+        retroInterface.getOrderId(map).enqueue(object : Callback<Order> {
+                override fun onResponse(call: Call<Order>, response: retrofit2.Response<Order>) {
+                    if(response.body()!=null){
+                        paymentDialog.dismiss()
+                        intiatePayment(amount, response.body()!!)
+                    }
+                }
+
+                override fun onFailure(call: Call<Order>, t: Throwable) {
+                }
+
+            })
+
 
     }
 
@@ -791,7 +631,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
             Method.POST, setAddressUrl,
             Response.Listener { response ->
                 if (response.equals("Address added")) {
-                    dialogView.newAddressLayout.visibility = GONE
+                    dialogView.newAddressLayout.visibility = View.GONE
                     loadingDialog.dismiss()
                     Toast.makeText(this, response, Toast.LENGTH_SHORT).show()
                     GetAddress(dialog, dialogView, finalList1, paymentMode)
@@ -829,6 +669,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
     }
 
+
     private fun getAdditionInfo(
         address: String,
         dialogView: CheckoutAddressLayoutBinding,
@@ -840,6 +681,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
 
     }
+
 
     private fun getDeliveryCharges(
         pincode: String,
@@ -857,16 +699,17 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
         }
 
         dialogView.txtDeliveryCharges.setText("₹" + deliveryCharges)
-        toPay += totalCartAmount + deliveryCharges.toInt()
+        toPay += totalPay + deliveryCharges.toInt()
         dialogView.etTotalPay.setText("₹" + toPay.toString() + " /-")
         val netDate: Date = Date(System.currentTimeMillis())
         val futureSplit = getFutureDate(netDate, days.toInt()) ?: ""
         deliveryDate = futureSplit.split("-")[1]
         dialogView.txtDate.setText(futureSplit.split("-")[0])
-        expectedDate=dialogView.txtDate.text.toString()
+        expectedDate = dialogView.txtDate.text.toString()
         finaladdress = address.replace("~", ", ")
         dialogView.address.setText(finaladdress)
     }
+
 
 
     fun getFutureDate(currentDate: Date?, days: Int): String? {
@@ -886,6 +729,22 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
     }
 
 
+    private fun intiatePayment(amount: String, order: Order) {
+
+        val checkout = Checkout()
+        checkout.setKeyID(order.getKeyId())
+        checkout.setImage(android.R.drawable.ic_menu_report_image)
+
+        val paymentOptions = JSONObject()
+        paymentOptions.put("name","Grocery app")
+        paymentOptions.put("amount",amount)
+        paymentOptions.put("order_id",order.getOrderId())
+        paymentOptions.put("currency","INR")
+        paymentOptions.put("description","Pay to grocery app")
+        checkout.open(this,paymentOptions)
+
+
+    }
     private fun MakeOrder(razorPayOrderId: String, paymentId: String) {
 
         val dialog = ProgressDialog.progressDialog(this, "Placing your order")
@@ -893,33 +752,20 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
         val orderId:String
         if(!razorPayOrderId.equals("")){
-             orderId = razorPayOrderId +","+paymentId
+            orderId = razorPayOrderId +","+paymentId
 
         }else{
             val random = Random(System.currentTimeMillis())
             val finalResult = 10000000 + random.nextLong()
-             orderId = "ORD" + finalResult.toString().replace("-", "")
+            orderId = "ORD" + finalResult.toString().replace("-", "")
         }
 
 
-        for (item in 0 until cartItemList.size) {
 
-
-            for (info in 0 until list.size) {
-                if (list[info].id.equals(cartItemList[item].pId)) {
-
-                    productName = list.get(info).pNAme
-                    productImage = list.get(info).pImage
-                    productPrice = list.get(info).pDisPrice
-                    productCategory = list.get(info).pCat
-                    productStock = list.get(info).pStock
-
-                }
-            }
             val productPaymentStatus:String
 
-            val productId = cartItemList.get(item).pId
-            val productQuantity = cartItemList.get(item).quantity
+            val productId = pId
+            val productQuantity = quantity.toString()
             val productAddress = finaladdress
             val productDeliveryDate = deliveryDate
             val productPaymentMode = paymentMode
@@ -932,6 +778,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
             }
             val productTackingStatus = "ordered"
             val productUid = "ODM" + uid
+            val  item =0
 
             SetOrdertoServer(
                 orderId,
@@ -943,19 +790,21 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
                 productPaymentStatus,
                 productTackingStatus,
                 productUid,
-                productName,
-                productImage,
-                productPrice,
+                pName,
+                pImage,
+                pDisPrice,
                 dialog,
-                productCategory,
-                productStock,item
+                pCat,
+                pStock,
+                item
             )
 
 
-        }
+
 
 
     }
+
 
     private fun SetOrdertoServer(
         orderId: String,
@@ -984,15 +833,9 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
             Method.POST, placeOrderUrl,
             Response.Listener { response ->
                 if (response.equals("Order placed")) {
-                    wholeProductsName+="\n${productName}"
-                    UpdateStock(productCategory, productQuantity, productStock, productId,productName,item)
-                    orderComplete++
-                    if (orderComplete == cartItemList.size) {
-                        if (response.equals("Order placed")) {
-                            EmptyCart(dialog, response)
 
-                        }
-                    }
+
+                    UpdateStock(productCategory, productQuantity, productStock, productId,response,dialog,productName,item)
 
 
                 } else {
@@ -1046,6 +889,8 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
         productQuantity: String,
         productStock: String,
         productId: String,
+        OrderResponse: String,
+        dialog: Dialog,
         productName: String,
         item: Int
     ) {
@@ -1057,6 +902,12 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
             Method.POST, updateStockUrl,
             Response.Listener { response ->
                 if (response.equals("Updated")) {
+                    Toast.makeText(this, OrderResponse, Toast.LENGTH_SHORT).show()
+
+                    Notify("Order placed","Your order is placed successfully for "+productName+"\nExpected delivery "+expectedDate,uid)
+                    dialog.dismiss()
+                    finish()
+                    startActivity(Intent(this, OrderPlacedSuccessfully_Activity::class.java))
 
                 } else {
                     Toast.makeText(this, response, Toast.LENGTH_SHORT).show()
@@ -1095,94 +946,6 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
     }
 
-    private fun EmptyCart(dialog: Dialog, OrderResponse: String?) {
-
-        val request: StringRequest = object : StringRequest(
-            Method.POST, emptyCartUrl,
-            Response.Listener { response ->
-                if (response.equals("Cart empty")) {
-                    Notify("Order placed","Your order is placed for "+wholeProductsName+"\nExpected delivery "+expectedDate,uid)
-                    Toast.makeText(this, OrderResponse, Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                    finish()
-                    startActivity(Intent(this,OrderPlacedSuccessfully_Activity::class.java))
-
-                } else {
-                    dialog.dismiss()
-                    Toast.makeText(this, response, Toast.LENGTH_SHORT).show()
-
-                }
-
-
-            },
-            Response.ErrorListener { error ->
-                try {
-                    dialog.dismiss()
-                    Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
-                } catch (e: Exception) {
-                }
-
-            }) {
-            override fun getParams(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                params["cartId"] = "cart$uid"
-                return params
-            }
-
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                params["Content-Type"] = "application/x-www-form-urlencoded"
-                return params
-            }
-        }
-
-        val queue: RequestQueue = Volley.newRequestQueue(this)
-        queue.add(request)
-
-    }
-
-    private fun generateOrderId(amount: String, paymentDialog: Dialog) {
-
-        var map = HashMap<String,String>()
-        map["amount"]=amount
-
-
-        retroInterface
-            .getOrderId(map).enqueue(object : Callback<Order> {
-                override fun onResponse(call: Call<Order>, response: retrofit2.Response<Order>) {
-                    if(response.body()!=null){
-                        paymentDialog.dismiss()
-                        intiatePayment(amount, response.body()!!)
-                    }
-                }
-
-                override fun onFailure(call: Call<Order>, t: Throwable) {
-                }
-
-            })
-
-
-    }
-
-
-
-    private fun intiatePayment(amount: String, order: Order) {
-
-        val checkout =Checkout()
-        checkout.setKeyID(order.getKeyId())
-        checkout.setImage(R.drawable.ic_menu_report_image)
-
-        val paymentOptions = JSONObject()
-        paymentOptions.put("name","Grocery app")
-        paymentOptions.put("amount",amount)
-        paymentOptions.put("order_id",order.getOrderId())
-        paymentOptions.put("currency","INR")
-        paymentOptions.put("description","Pay to grocery app")
-        checkout.open(this,paymentOptions)
-
-
-    }
 
 
     override fun onPaymentSuccess(p0: String?, p1: PaymentData?) {
@@ -1198,7 +961,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
             .enqueue(object : Callback<String>{
                 override fun onResponse(call: Call<String>, response: retrofit2.Response<String>) {
                     if(response.body().equals("success")){
-                        Toast.makeText(this@Cart_Activity,"Payment successful",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Buynow_Activity,"Payment successful",Toast.LENGTH_SHORT).show()
                         placingOrderDialog.dismiss()
                         MakeOrder(p1!!.orderId,p1!!.paymentId)
                     }
@@ -1220,10 +983,12 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
 
     private  fun Notify(title:String, message:String,topic:String){
 
-        val pushNotification =
-            PushNotification(NotificationData(title, message), Constant.TOPIC +topic)
-        SendNotification.Send(pushNotification, this)
+            val pushNotification =
+                PushNotification(NotificationData(title, message), TOPIC+topic)
+            SendNotification.Send(pushNotification, this)
 
     }
+
+
 
 }

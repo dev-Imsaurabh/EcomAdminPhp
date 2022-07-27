@@ -14,6 +14,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.mac.ecomadminphp.R
+import com.mac.ecomadminphp.UserArea.Activities.BuyNow.Buynow_Activity
 import com.mac.ecomadminphp.UserArea.Activities.Cart.Cart_Activity
 import com.mac.ecomadminphp.Utils.Constants
 import com.mac.ecomadminphp.Utils.ProgressDialog
@@ -47,10 +48,28 @@ class SeeProduct_Activity : AppCompatActivity() {
         GetUser()
         CheckProductAlreadyInCart();
         ClickOnAddToCartBtn()
+        ClickOnBuyNowBtn()
 
 
 
 
+    }
+
+    private fun ClickOnBuyNowBtn() {
+        binding.buyNowBtn.setOnClickListener {
+            val intent = Intent(this,Buynow_Activity::class.java)
+            intent.putExtra("pId",pId)
+            intent.putExtra("pName",pName)
+            intent.putExtra("pCat",pCat)
+            intent.putExtra("pStock",pStock)
+            intent.putExtra("pPrice",pPrice)
+            intent.putExtra("pDisPrice",pDisPrice)
+            intent.putExtra("pDesc",pDesc)
+            intent.putExtra("pImage",pImage)
+            intent.putExtra("uid",uid)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun CheckStock() {

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="8dp"
+        android:hint="Account number"
+        android:maxLength="30"
+        android:inputType="number"
+        android:paddingStart="16dp"
+        android:id="@+id/account_number"
+        android:background="@drawable/et_border1">
+
+    </EditText>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/account_number"
+        android:layout_margin="8dp"
+        android:paddingStart="16dp"
+        android:maxLength="30"
+        android:id="@+id/ifsc_code"
+        android:hint="IFSC code"
+        android:background="@drawable/et_border1">
+
+    </EditText>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="8dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/ifsc_code"
+        android:layout_margin="8dp"
+        android:id="@+id/return_request_btn"
+        android:background="@drawable/btn_border1"
+        android:text="Return and issue refund"/>
+
+
+
+
+
+
+</RelativeLayout>

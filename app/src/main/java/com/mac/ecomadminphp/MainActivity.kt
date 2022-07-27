@@ -25,12 +25,17 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.messaging.FirebaseMessaging
 import com.mac.ecomadminphp.Adapters.Pager
 import com.mac.ecomadminphp.Authentication.EmailVerification_Activity
 import com.mac.ecomadminphp.Authentication.Login_Activity
 import com.mac.ecomadminphp.ClientArea.ClientAreaActivity
 import com.mac.ecomadminphp.ClientArea.categories.CategoryAdapter
 import com.mac.ecomadminphp.ClientArea.categories.Category_Model
+import com.mac.ecomadminphp.FCM.Model.Constant.TOPIC
+import com.mac.ecomadminphp.FCM.Model.NotificationData
+import com.mac.ecomadminphp.FCM.Model.PushNotification
+import com.mac.ecomadminphp.FCM.SendNotification
 import com.mac.ecomadminphp.UserArea.Activities.Additional.Contact_us_Activity
 import com.mac.ecomadminphp.UserArea.Activities.Additional.My_Account_Activity
 import com.mac.ecomadminphp.UserArea.Activities.Additional.Notification_Activity
@@ -70,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+
 
 
         SetupNavigation()
@@ -151,6 +157,7 @@ class MainActivity : AppCompatActivity() {
                 for(item in getAdmins){
                     if (email.equals(item)) {
                         binding.btnClientArea.visibility = View.VISIBLE
+                        FirebaseMessaging.getInstance().subscribeToTopic("admin")
                         break
                     }
 
@@ -178,6 +185,10 @@ class MainActivity : AppCompatActivity() {
             binding.txtUsername.setText(splitDetails?.get(0) ?: "username")
             binding.txtEmail.setText(splitDetails?.get(1) ?: "email")
             uid=splitDetails?.get(3)?:"nothing"
+            FirebaseMessaging.getInstance().subscribeToTopic(uid)
+
+
+
             ClientAreaConfig(splitDetails?.get(1) ?: "email");
 
 

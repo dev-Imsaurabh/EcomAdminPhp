@@ -1,6 +1,7 @@
 package com.mac.ecomadminphp.ClientArea.ManageOrders.Adapters
 
 import android.R
+import android.R.color.holo_red_dark
 import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.mac.ecomadminphp.UserArea.Activities.Model.OrderModel
 import com.mac.ecomadminphp.Utils.Constants
 import com.mac.ecomadminphp.Utils.ProgressDialog
 import com.mac.ecomadminphp.databinding.ManageOrderItemLayoutBinding
+import com.mac.ecomadminphp.databinding.OrderItemLayoutBinding
 import com.squareup.picasso.Picasso
 import org.json.JSONArray
 import org.json.JSONException
@@ -104,21 +106,45 @@ class ManageOrderAdapter(
 
             if(orderListPos.productTrackingStatus.equals("ordered")){
                 binding.confirmBtn.visibility= VISIBLE
-            }else if(orderListPos.productTrackingStatus.equals("cancel")){
-                binding.cancelBtn.visibility= VISIBLE
-            }else if(orderListPos.productTrackingStatus.equals("delivered")){
+            }else if(orderListPos.productTrackingStatus.equals("cancel")||orderListPos.productTrackingStatus.equals("refund")) {
+                binding.productDescription.setTextColor(context.resources.getColor(R.color.holo_red_dark))
+                if (orderListPos.productPaymentMode.equals("online")) {
+                    binding.confirmRefund.visibility = VISIBLE
+                }
+                binding.productDeliveryDate.visibility = GONE
+                binding.assignSpinner.visibility = GONE
+                binding.trackLayout.visibility = GONE
+            }
+            if(orderListPos.productTrackingStatus.equals("delivered")){
 
                 binding.assignSpinner.visibility= GONE
                 binding.productDeliveryDate.visibility= GONE
 
-            }else if(orderListPos.productTrackingStatus.equals("return")){
+            }
+            if(orderListPos.productTrackingStatus.equals("return")){
                 binding.returnBtn.visibility= VISIBLE
-            }else if(orderListPos.productTrackingStatus.equals("refund")){
+                binding.assignSpinner.visibility= GONE
+                binding.productDeliveryDate.visibility= GONE
+                binding.topay.visibility= GONE
+                binding.trackLayout.visibility= GONE
+            }
+            if(orderListPos.productTrackingStatus.equals("refund")){
+                binding.assignSpinner.visibility= GONE
+                binding.trackLayout.visibility= GONE
                 binding.confirmRefund.visibility= VISIBLE
-            }else if(orderListPos.productTrackingStatus.equals("shipped")){
+                binding.productDescription.setTextColor(context.resources.getColor(R.color.holo_red_dark))
+
+            }
+            if(orderListPos.productTrackingStatus.equals("shipped")){
                 binding.assignSpinner.visibility= GONE
-            }else if(orderListPos.productTrackingStatus.equals("assigned")){
+            }
+            if(page.equals("5")){
                 binding.assignSpinner.visibility= GONE
+                binding.trackLayout.visibility= GONE
+                binding.confirmBtn.visibility= GONE
+                binding.returnBtn.visibility= GONE
+                binding.confirmRefund.visibility= GONE
+                binding.topay.visibility= GONE
 
             }
 
@@ -136,6 +162,27 @@ class ManageOrderAdapter(
                 val  adapter = ArrayAdapter(context, R.layout.simple_list_item_1, list)
                 adapter.notifyDataSetChanged()
                 binding.cashTrackerLv.adapter = adapter
+
+            }
+
+            binding.returnBtn.setOnClickListener {
+                val status = "returned"
+                val pd = ProgressDialog.progressDialog(context,"Confirming return...")
+                pd.show()
+                val reason = orderListPos.productDescription+"\n--->Return confirmed ! your order will be soon picked up by our delivery partner."
+                updateStatus(orderListPos,binding,pd,status,reason)
+
+
+            }
+
+            binding.confirmRefund.setOnClickListener {
+
+                val status = "refunded"
+                val pd = ProgressDialog.progressDialog(context,"Confirming refund...")
+                pd.show()
+                val reason = orderListPos.productDescription+"\n\n--->Refund completed !"
+                updateStatus(orderListPos,binding,pd,status,reason)
+
 
             }
 
@@ -376,6 +423,71 @@ class ManageOrderAdapter(
         val queue: RequestQueue = Volley.newRequestQueue(context)
         queue.add(request)
 
+
+    }
+
+
+    private fun updateStatus(
+        orderListPos: ManageOrderModel,
+        binding: ManageOrderItemLayoutBinding,
+        pd: Dialog,
+        status: String,
+        reason: String
+    ) {
+
+        val fetchUrl = Constants.baseUrl1+ "/updateStatus.php"
+        val request: StringRequest = object : StringRequest(
+            Method.POST, fetchUrl,
+            Response.Listener { response ->
+                if(response.equals("returned")){
+                    pd.dismiss()
+                    binding.returnBtn.visibility= GONE
+                    binding.productDescription.setText("Return confirmed")
+                    Toast.makeText(context,response, Toast.LENGTH_SHORT).show()
+
+                }else if(response.equals("refunded")){
+                    pd.dismiss()
+                    binding.confirmRefund.visibility= GONE
+                    binding.productDescription.setText("Refund completed")
+                    Toast.makeText(context,response, Toast.LENGTH_SHORT).show()
+                }else{
+                    pd.dismiss()
+                    Toast.makeText(context, response, Toast.LENGTH_SHORT).show()
+                }
+
+
+
+            },
+            Response.ErrorListener { error ->
+                pd.dismiss()
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+
+
+            }) {
+            override fun getParams(): Map<String, String> {
+                val params: MutableMap<String, String> = HashMap()
+                params["orderId"] = orderListPos.orderId
+                params["orderManagerId"] = orderListPos.productUid
+                params["status"] = status
+                params["productId"] = orderListPos.productId
+                params["reason"] = reason
+                if(!orderListPos.productRefundStatus.equals("")){
+                    params["deluid"]="del"+orderListPos.productRefundStatus.split(",")[1]
+
+                }
+                return params
+            }
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val params: MutableMap<String, String> = HashMap()
+                params["Content-Type"] = "application/x-www-form-urlencoded"
+                return params
+            }
+        }
+
+        val queue: RequestQueue = Volley.newRequestQueue(context)
+        queue.add(request)
 
     }
 

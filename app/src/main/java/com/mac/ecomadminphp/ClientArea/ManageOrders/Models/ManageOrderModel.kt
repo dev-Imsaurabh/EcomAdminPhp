@@ -17,6 +17,7 @@ data class ManageOrderModel(
     val productOrderDate: String,
     val productDescription: String,
     val productRefundStatus: String,
-    val total:String,
-    val statusValue:String
+    val total: String,
+    val statusValue: String,
+    val page: String
 )

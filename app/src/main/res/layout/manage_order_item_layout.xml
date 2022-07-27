@@ -130,7 +130,7 @@
             android:padding="8dp"
             android:textColor="@color/green"
             android:layout_marginStart="16dp"
-            android:textSize="14sp"
+            android:textSize="10sp"
             android:textStyle="italic"
             android:id="@+id/productDescription"/>
 

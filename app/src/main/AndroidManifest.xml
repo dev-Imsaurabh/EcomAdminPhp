@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.Receiver" />
+
 
     <application
         android:allowBackup="true"
@@ -18,7 +20,7 @@
         android:theme="@style/Theme.EcomAdminPhp"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".UserArea.Activities.Buynow_Activity"
+            android:name=".UserArea.Activities.BuyNow.Buynow_Activity"
             android:exported="false" />
         <activity
             android:name=".ClientArea.AddPopular.Delete_PopularActivity"
@@ -128,6 +130,23 @@
                     android:scheme="io.rzp" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <service
+            android:name=".FCM.FCMService"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.Send">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.Recieve" />
+            </intent-filter>
+        </service>
+
+
+
+
     </application>
 
 </manifest>

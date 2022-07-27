@@ -56,12 +56,12 @@ class CommonOrderViewActivity : AppCompatActivity() {
             paymentId=split[1]
             binding.paymentId.setText("Payment ID: "+ paymentId)
             binding.orderId.setText("Order ID: "+split[0])
-            binding.amountTxt.setText("Paid: ₹"+total)
+            binding.amountTxt.setText("Paid: ₹ ${total}\n₹${dc} delivery charge included")
 
 
         }else{
-            binding.amountTxt.setText("To pay : ₹"+total)
-            binding.orderId.setText("Order ID: "+inorderId)
+            binding.amountTxt.setText("To pay : ₹ ${total}\n₹${dc} delivery charge included")
+            binding.orderId.setText("Order ID:\n"+inorderId)
         }
 
 
@@ -105,15 +105,55 @@ class CommonOrderViewActivity : AppCompatActivity() {
 
                             if(page.equals("0")){
                                 if(productTrackingStatus.equals("ordered")||productTrackingStatus.equals("shipped")){
-                                    var data = ManageOrderModel(id,orderId,productId,productQuantity,productAddress,productTotalPay,productPaymentMode,productPaymentStatus,productTrackingStatus,productUid,productDeliveryDate,productName,productImage, productOrderDate,productDescription,productRefundStatus,total,status)
+                                    var data = ManageOrderModel(
+                                        id,
+                                        orderId,
+                                        productId,
+                                        productQuantity,
+                                        productAddress,
+                                        productTotalPay,
+                                        productPaymentMode,
+                                        productPaymentStatus,
+                                        productTrackingStatus,
+                                        productUid,
+                                        productDeliveryDate,
+                                        productName,
+                                        productImage,
+                                        productOrderDate,
+                                        productDescription,
+                                        productRefundStatus,
+                                        total,
+                                        status,
+                                        page
+                                    )
                                     if(data.orderId.equals(inorderId)){
                                         orderList.add(0,data)
                                     }
                                 }
 
                             }else if(page.equals("1")){
-                                if(productTrackingStatus.equals("cancel")){
-                                    var data = ManageOrderModel(id,orderId,productId,productQuantity,productAddress,productTotalPay,productPaymentMode,productPaymentStatus,productTrackingStatus,productUid,productDeliveryDate,productName,productImage, productOrderDate,productDescription,productRefundStatus,total,status)
+                                if(productTrackingStatus.equals("cancel")||productTrackingStatus.equals("refund")){
+                                    var data = ManageOrderModel(
+                                        id,
+                                        orderId,
+                                        productId,
+                                        productQuantity,
+                                        productAddress,
+                                        productTotalPay,
+                                        productPaymentMode,
+                                        productPaymentStatus,
+                                        productTrackingStatus,
+                                        productUid,
+                                        productDeliveryDate,
+                                        productName,
+                                        productImage,
+                                        productOrderDate,
+                                        productDescription,
+                                        productRefundStatus,
+                                        total,
+                                        status,
+                                        page
+                                    )
                                     if(data.orderId.equals(inorderId)){
                                         orderList.add(0,data)
                                     }
@@ -121,7 +161,27 @@ class CommonOrderViewActivity : AppCompatActivity() {
 
                             }else if(page.equals("2")){
                                 if(productTrackingStatus.equals("delivered")){
-                                    var data = ManageOrderModel(id,orderId,productId,productQuantity,productAddress,productTotalPay,productPaymentMode,productPaymentStatus,productTrackingStatus,productUid,productDeliveryDate,productName,productImage, productOrderDate,productDescription,productRefundStatus,total,status)
+                                    var data = ManageOrderModel(
+                                        id,
+                                        orderId,
+                                        productId,
+                                        productQuantity,
+                                        productAddress,
+                                        productTotalPay,
+                                        productPaymentMode,
+                                        productPaymentStatus,
+                                        productTrackingStatus,
+                                        productUid,
+                                        productDeliveryDate,
+                                        productName,
+                                        productImage,
+                                        productOrderDate,
+                                        productDescription,
+                                        productRefundStatus,
+                                        total,
+                                        status,
+                                        page
+                                    )
                                     if(data.orderId.equals(inorderId)){
                                         orderList.add(0,data)
                                     }
@@ -129,23 +189,64 @@ class CommonOrderViewActivity : AppCompatActivity() {
 
                             }else if(page.equals("3")){
                                 if(productTrackingStatus.equals("return")){
-                                    var data = ManageOrderModel(id,orderId,productId,productQuantity,productAddress,productTotalPay,productPaymentMode,productPaymentStatus,productTrackingStatus,productUid,productDeliveryDate,productName,productImage, productOrderDate,productDescription,productRefundStatus,total,status)
+                                    var data = ManageOrderModel(
+                                        id,
+                                        orderId,
+                                        productId,
+                                        productQuantity,
+                                        productAddress,
+                                        productTotalPay,
+                                        productPaymentMode,
+                                        productPaymentStatus,
+                                        productTrackingStatus,
+                                        productUid,
+                                        productDeliveryDate,
+                                        productName,
+                                        productImage,
+                                        productOrderDate,
+                                        productDescription,
+                                        productRefundStatus,
+                                        total,
+                                        status,
+                                        page
+                                    )
                                     if(data.orderId.equals(inorderId)){
+
                                         orderList.add(0,data)
                                     }
                                 }
 
                             }else if(page.equals("4")){
                                 if(productTrackingStatus.equals("refund")){
-                                    var data = ManageOrderModel(id,orderId,productId,productQuantity,productAddress,productTotalPay,productPaymentMode,productPaymentStatus,productTrackingStatus,productUid,productDeliveryDate,productName,productImage, productOrderDate,productDescription,productRefundStatus,total,status)
+                                    var data = ManageOrderModel(
+                                        id,
+                                        orderId,
+                                        productId,
+                                        productQuantity,
+                                        productAddress,
+                                        productTotalPay,
+                                        productPaymentMode,
+                                        productPaymentStatus,
+                                        productTrackingStatus,
+                                        productUid,
+                                        productDeliveryDate,
+                                        productName,
+                                        productImage,
+                                        productOrderDate,
+                                        productDescription,
+                                        productRefundStatus,
+                                        total,
+                                        status,
+                                        page
+                                    )
                                     if(data.orderId.equals(inorderId)){
                                         orderList.add(0,data)
                                     }
                                 }
 
                             }else if(page.equals("5")){
-                                if(!productTrackingStatus.equals("ordered")){
-                                    var data = ManageOrderModel(id,orderId,productId,productQuantity,productAddress,productTotalPay,productPaymentMode,productPaymentStatus,productTrackingStatus,productUid,productDeliveryDate,productName,productImage, productOrderDate,productDescription,productRefundStatus,total,status)
+                                if(!productTrackingStatus.equals("cancel")&&!productTrackingStatus.equals("ordered")){
+                                    var data = ManageOrderModel(id,orderId,productId,productQuantity,productAddress,productTotalPay,productPaymentMode,productPaymentStatus,productTrackingStatus,productUid,productDeliveryDate,productName,productImage, productOrderDate,productDescription,productRefundStatus,total,status,page)
                                     if(data.orderId.equals(inorderId)){
                                         orderList.add(0,data)
                                     }
