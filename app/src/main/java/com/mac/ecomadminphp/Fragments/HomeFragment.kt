@@ -53,52 +53,55 @@ class HomeFragment : Fragment() {
 
     private fun GetCategories() {
         binding.loadingLayout.root.visibility= VISIBLE
-        val request: StringRequest = StringRequest(Request.Method.POST,getUrl ,{ response->
+        try {
+            val request: StringRequest = StringRequest(Request.Method.POST,getUrl ,{ response->
 
 
-            val jsonObject = JSONObject(response)
-            val success:String = jsonObject.getString("success")
-            val jsonArray: JSONArray = jsonObject.getJSONArray("data")
-            productList.clear()
-            finalList.clear()
-            if(success.equals("1")){
+                val jsonObject = JSONObject(response)
+                val success:String = jsonObject.getString("success")
+                val jsonArray: JSONArray = jsonObject.getJSONArray("data")
+                productList.clear()
+                finalList.clear()
+                if(success.equals("1")){
 
-                for (item in 0 until jsonArray.length()){
-                    val jsonObject: JSONObject = jsonArray.getJSONObject(item)
-                    val id:String = jsonObject.getString("id")
-                    val category:String = jsonObject.getString("category")
-                    val productModel = Product_Model(id,category)
+                    for (item in 0 until jsonArray.length()){
+                        val jsonObject: JSONObject = jsonArray.getJSONObject(item)
+                        val id:String = jsonObject.getString("id")
+                        val category:String = jsonObject.getString("category")
+                        val productModel = Product_Model(id,category)
 
-                    productList.add(0,productModel)
+                        productList.add(0,productModel)
+
+                    }
+
+
+                    for(item in 0 until productList.size){
+
+                        getProductCount(productList.get(item).category)
+
+
+                    }
+
+
+
+
+
+                }else{
+
+                    Toast.makeText(context,"Something went wrong", Toast.LENGTH_SHORT).show()
 
                 }
 
-
-                for(item in 0 until productList.size){
-
-                    getProductCount(productList.get(item).category)
-
-
-                }
-
-
-
-
-
-            }else{
+            },{ error->
 
                 Toast.makeText(context,"Something went wrong", Toast.LENGTH_SHORT).show()
 
-            }
+            })
 
-        },{ error->
-
-            Toast.makeText(context,"Something went wrong", Toast.LENGTH_SHORT).show()
-
-        })
-
-        val queue: RequestQueue = Volley.newRequestQueue(context)
-        queue.add(request)
+            val queue: RequestQueue = Volley.newRequestQueue(context)
+            queue.add(request)
+        } catch (e: Exception) {
+        }
 
 
     }

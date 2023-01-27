@@ -368,55 +368,63 @@ class MainActivity : AppCompatActivity() {
 
     private fun GetCategories() {
 
-        val request:StringRequest = StringRequest(Request.Method.POST,getUrl ,{ response->
+        try {
+            val request:StringRequest = StringRequest(Request.Method.POST,getUrl ,{ response->
 
 
-            val categoryList = mutableListOf<Category_Model>()
-            val jsonObject =JSONObject(response)
-            val success:String = jsonObject.getString("success")
-            val jsonArray:JSONArray = jsonObject.getJSONArray("data")
-            categoryList.clear()
-            finalList.clear()
-            if(success.equals("1")){
+                val categoryList = mutableListOf<Category_Model>()
+//                Toast.makeText(this, response, Toast.LENGTH_SHORT).show()
+                val jsonObject =JSONObject(response)
+                val success:String = jsonObject.getString("success")
+                if(success.equals("0")){
+                    return@StringRequest
+                }
+                val jsonArray:JSONArray = jsonObject.getJSONArray("data")
+                categoryList.clear()
+                finalList.clear()
 
-                for (item in 0 until jsonArray.length()){
-                    val jsonObject:JSONObject = jsonArray.getJSONObject(item)
-                    val id:String = jsonObject.getString("id")
-                    val category:String = jsonObject.getString("category")
-                    val categoryModel = Category_Model(id,category)
+                if(success.equals("1")){
 
-                    categoryList.add(0,categoryModel)
+                    for (item in 0 until jsonArray.length()){
+                        val jsonObject:JSONObject = jsonArray.getJSONObject(item)
+                        val id:String = jsonObject.getString("id")
+                        val category:String = jsonObject.getString("category")
+                        val categoryModel = Category_Model(id,category)
+
+                        categoryList.add(0,categoryModel)
+
+                    }
+
+
+                    for(item in 0 until categoryList.size){
+
+                        finalList.add(categoryList.get(item).category)
+
+                    }
+
+                    Collections.shuffle(categoryList)
+
+
+                    val  adapter:CategoryAdapter = CategoryAdapter(this,categoryList)
+                    adapter.notifyDataSetChanged()
+                    setRecyclerView(adapter)
+
+                }else{
+
+                    Toast.makeText(this,"Something went wrong",Toast.LENGTH_SHORT).show()
 
                 }
 
-
-                for(item in 0 until categoryList.size){
-
-                    finalList.add(categoryList.get(item).category)
-
-                }
-
-                Collections.shuffle(categoryList)
-
-
-                val  adapter:CategoryAdapter = CategoryAdapter(this,categoryList)
-                adapter.notifyDataSetChanged()
-                setRecyclerView(adapter)
-
-            }else{
+            },{ error->
 
                 Toast.makeText(this,"Something went wrong",Toast.LENGTH_SHORT).show()
 
-            }
+            })
 
-        },{ error->
-
-            Toast.makeText(this,"Something went wrong",Toast.LENGTH_SHORT).show()
-
-        })
-
-        val queue: RequestQueue = Volley.newRequestQueue(this)
-        queue.add(request)
+            val queue: RequestQueue = Volley.newRequestQueue(this)
+            queue.add(request)
+        } catch (e: Exception) {
+        }
 
 
     }

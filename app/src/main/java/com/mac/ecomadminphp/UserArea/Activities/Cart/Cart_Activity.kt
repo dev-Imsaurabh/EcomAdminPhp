@@ -144,7 +144,7 @@ class Cart_Activity : AppCompatActivity(), PaymentResultWithDataListener {
     ) {
         val request: StringRequest =
             object : StringRequest(Request.Method.POST, getAddressUrl, { response ->
-
+                Toast.makeText(this, response, Toast.LENGTH_SHORT).show()
 
                 val addressList = mutableListOf<AddressModel>()
                 val jsonObject = JSONObject(response)

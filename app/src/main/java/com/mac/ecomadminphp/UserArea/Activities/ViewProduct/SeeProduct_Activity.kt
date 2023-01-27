@@ -216,6 +216,7 @@ class SeeProduct_Activity : AppCompatActivity() {
         binding.addToCartBtn.setOnClickListener {
 
             if(binding.addToCartBtn.text.equals("Add to cart")){
+
                 val dialog = ProgressDialog.progressDialog(this,"Adding to cart")
                 dialog.show()
                 AddToCart(dialog)
@@ -231,7 +232,6 @@ class SeeProduct_Activity : AppCompatActivity() {
     }
 
     private fun AddToCart(dialog: Dialog) {
-
         val request: StringRequest = object : StringRequest(
             Method.POST, addToCartUrl,
             Response.Listener { response ->

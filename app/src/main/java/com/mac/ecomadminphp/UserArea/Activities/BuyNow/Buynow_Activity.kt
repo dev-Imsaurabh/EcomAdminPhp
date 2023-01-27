@@ -204,6 +204,7 @@ class Buynow_Activity : AppCompatActivity() , PaymentResultWithDataListener {
         val request: StringRequest = StringRequest(Request.Method.POST, getPinCodeUrl, { response ->
 
 
+
             pinCodeList = mutableListOf<Pincode_Model>()
             val jsonObject = JSONObject(response)
             val success: String = jsonObject.getString("success")

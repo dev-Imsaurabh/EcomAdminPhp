@@ -162,7 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Add to cart"
-            android:enabled="false"
+            android:enabled="true"
             android:textColor="@color/green"
             android:id="@+id/add_to_cart_btn"
             android:background="@drawable/btn_border3"
